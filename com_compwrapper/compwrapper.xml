@@ -5,7 +5,7 @@
 	<creationDate>2026-10</creationDate>
 	<copyright>(C) 2026 Karsten Hausmann</copyright>
 	<license>GNU General Public License version 2 or later</license>
-	<version>1.3.0</version>
+	<version>1.4.0</version>
 	<description>COM_COMPWRAPPER_XML_DESCRIPTION</description>
 	<namespace path="src">Hausi\Component\Compwrapper</namespace>
 

@@ -122,6 +122,8 @@ class HtmlView extends BaseHtmlView
             'mode'        => $p->get('height_mode', 'fixed') === 'auto' ? 'auto' : 'fixed',
             'cssWidth'    => $this->cssWidth(),
             'cssHeight'   => $this->cssHeight(),
+            'fit'         => $this->fitPercent(),
+            'offset'      => max(0, (int) $p->get('viewport_offset', 0)),
             'minHeight'   => max(0, (int) $p->get('min_height', 300)),
             'scrollX'     => $scrollX,
             'scrollY'     => $scrollY,
@@ -184,6 +186,25 @@ class HtmlView extends BaseHtmlView
         }
 
         return max(50, $value) . 'px';
+    }
+
+    /**
+     * Percentage of the free window space the iframe should fill (0 = not a percentage height).
+     * wrapper.js measures where the iframe starts and sizes it to fit; cssHeight() is the fallback without JS.
+     */
+    protected function fitPercent(): float
+    {
+        if ($this->params->get('height_mode') === 'viewport') {
+            return 100;
+        }
+
+        if ($this->params->get('height_mode', 'fixed') !== 'fixed') {
+            return 0;
+        }
+
+        [$value, $unit] = $this->sizeValue('height', 800, 'px');
+
+        return $unit === '%' ? min(100, $value) : 0;
     }
 
     /**

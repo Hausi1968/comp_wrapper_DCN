@@ -60,6 +60,8 @@ $dcnTitle = $dcn ? $this->heroTitle() : '';
 			style="<?php echo $this->escape($wrapStyle); ?>"
 			data-cw-mode="<?php echo $f['mode']; ?>"
 			data-cw-min="<?php echo $f['minHeight']; ?>"
+			data-cw-fit="<?php echo $f['fit']; ?>"
+			data-cw-offset="<?php echo $f['offset']; ?>"
 			data-cw-scroll-x="<?php echo $f['scrollX']; ?>"
 			data-cw-scroll-y="<?php echo $f['scrollY']; ?>">
 

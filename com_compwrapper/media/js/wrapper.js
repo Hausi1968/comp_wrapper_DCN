@@ -53,6 +53,23 @@
     }
   }
 
+  /**
+   * Percentage height: fill the given share of the space between the iframe's top and the window bottom,
+   * so header, menu and hero bar are taken into account automatically.
+   */
+  function fitHeight(frame, iframe, percent, offset) {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var frameRect = frame.getBoundingClientRect();
+    var top = iframe.getBoundingClientRect().top + window.pageYOffset;
+    var below = Math.max(0, frameRect.bottom - iframe.getBoundingClientRect().bottom);
+
+    // Only use the remaining space when the iframe starts on the first screen, otherwise the full window
+    var start = top < vh * 0.6 ? top : 0;
+    var free = vh - start - below - 16;
+
+    setHeight(frame, iframe, free * percent / 100 - offset);
+  }
+
   function init(frame) {
     var iframe = frame.querySelector('.cw-iframe');
     if (!iframe) {
@@ -103,6 +120,22 @@
 
     // Fallback: hide the loader even if "load" never fires (blocked by X-Frame-Options etc.)
     setTimeout(function () { frame.classList.remove('cw-loading'); }, 8000);
+
+    var fit = parseFloat(frame.getAttribute('data-cw-fit')) || 0;
+
+    if (fit > 0) {
+      var offset = parseInt(frame.getAttribute('data-cw-offset'), 10) || 0;
+      var refit = function () { fitHeight(frame, iframe, fit, offset); };
+      var timer;
+
+      refit();
+      // Fonts and images above the iframe can still move it down after DOMContentLoaded
+      window.addEventListener('load', refit);
+      window.addEventListener('resize', function () {
+        clearTimeout(timer);
+        timer = setTimeout(refit, 100);
+      });
+    }
 
     if (auto) {
       window.addEventListener('message', function (event) {

@@ -12,7 +12,7 @@ Jede eingebundene Seite ist ein eigener Menüeintrag mit eigener URL und eigenen
 ## Funktionen
 
 - URL extern (http/https) oder als Pfad der eigenen Website (`/shop/`)
-- Breite in px oder % (der Inhaltsbreite), Höhe in px oder % (der Fensterhöhe, optional minus Versatz) oder automatisch; Mindesthöhe, Lazy-Loading
+- Breite in px oder % (der Inhaltsbreite), Höhe in px, in % (des freien Platzes von der iframe-Oberkante bis zum Fensterrand; 100 % passt immer genau ins Fenster, auch bei Größenänderung) oder automatisch nach Inhalt; Mindesthöhe, Lazy-Loading
 - Scrollbalken horizontal und vertikal getrennt: automatisch, immer oder nie
 - Design: schlicht, Karte oder Soft (abgerundet, sanfter Schatten, Dark Mode), Eckenradius, Akzentfarbe,
   Ladeanimation, optionale Titelleiste mit „In neuem Fenster öffnen“
