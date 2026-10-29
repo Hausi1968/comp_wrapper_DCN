@@ -25,6 +25,34 @@
     }
   }
 
+  /**
+   * Scrollbars per axis. Same origin: set overflow on the embedded document directly.
+   * Other origin: ask the embedded page via postMessage (needs the snippet from the backend).
+   */
+  function applyScroll(iframe, scroll) {
+    if (scroll.x === 'auto' && scroll.y === 'auto') {
+      return;
+    }
+
+    try {
+      var doc = iframe.contentDocument;
+      if (doc && doc.documentElement) {
+        var root = doc.documentElement;
+        root.style.overflowX = scroll.x;
+        root.style.overflowY = scroll.y;
+        if (doc.body) {
+          doc.body.style.overflowX = scroll.x === 'hidden' ? 'hidden' : '';
+          doc.body.style.overflowY = scroll.y === 'hidden' ? 'hidden' : '';
+        }
+        return;
+      }
+    } catch (e) { /* cross origin, fall through */ }
+
+    if (iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'compwrapper:scroll', x: scroll.x, y: scroll.y }, '*');
+    }
+  }
+
   function init(frame) {
     var iframe = frame.querySelector('.cw-iframe');
     if (!iframe) {
@@ -32,15 +60,15 @@
     }
 
     var auto = frame.getAttribute('data-cw-mode') === 'auto';
-
-    var done = false;
+    var scroll = {
+      x: frame.getAttribute('data-cw-scroll-x') || 'auto',
+      y: frame.getAttribute('data-cw-scroll-y') || 'auto'
+    };
+    var lastDoc = null;
 
     function onLoad() {
-      if (done) {
-        return;
-      }
-      done = true;
       frame.classList.remove('cw-loading');
+      applyScroll(iframe, scroll);
 
       if (!auto) {
         return;
@@ -52,7 +80,9 @@
 
         try {
           var doc = iframe.contentDocument;
-          if (window.ResizeObserver && doc && doc.body) {
+          // Runs again after navigation inside the iframe, so observe each new document once
+          if (window.ResizeObserver && doc && doc.body && doc !== lastDoc) {
+            lastDoc = doc;
             new ResizeObserver(function () {
               setHeight(frame, iframe, sameOriginHeight(iframe));
             }).observe(doc.body);

@@ -20,6 +20,13 @@ $snippet = <<<'JS'
   window.addEventListener('load', send);
   window.addEventListener('resize', send);
   if (window.ResizeObserver) { new ResizeObserver(send).observe(document.body); }
+  window.addEventListener('message', function (e) {
+    var d = e.data, ok = ['auto', 'scroll', 'hidden'];
+    if (e.source !== parent || !d || d.type !== 'compwrapper:scroll') { return; }
+    if (ok.indexOf(d.x) > -1) { document.documentElement.style.overflowX = d.x; }
+    if (ok.indexOf(d.y) > -1) { document.documentElement.style.overflowY = d.y; }
+    send();
+  });
 })();
 </script>
 JS;

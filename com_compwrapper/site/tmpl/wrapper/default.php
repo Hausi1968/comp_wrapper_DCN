@@ -13,16 +13,17 @@ use Joomla\CMS\Language\Text;
 
 $f = $this->frame;
 
-$height = $f['mode'] === 'viewport' ? 'calc(100vh - ' . $f['offset'] . 'px)' : $f['height'] . 'px';
-
 $wrapStyle = sprintf(
     '--cw-radius:%dpx;--cw-accent:%s;--cw-height:%s;--cw-min-height:%dpx;--cw-width:%s;',
     $f['radius'],
     $f['accent'],
-    $height,
+    $f['cssHeight'],
     $f['minHeight'],
-    $f['width']
+    $f['cssWidth']
 );
+
+// The iframe attribute only knows on/off for both axes; per-axis control happens in wrapper.js
+$scrolling = ($f['scrollX'] === 'hidden' && $f['scrollY'] === 'hidden') ? 'no' : 'auto';
 ?>
 <div class="com-compwrapper">
 	<?php if ($this->params->get('show_page_heading')) : ?>
@@ -37,7 +38,9 @@ $wrapStyle = sprintf(
 		<div class="cw-frame cw-style-<?php echo $f['style']; ?><?php echo $f['loader'] ? ' cw-loading' : ''; ?>"
 			style="<?php echo $this->escape($wrapStyle); ?>"
 			data-cw-mode="<?php echo $f['mode']; ?>"
-			data-cw-min="<?php echo $f['minHeight']; ?>">
+			data-cw-min="<?php echo $f['minHeight']; ?>"
+			data-cw-scroll-x="<?php echo $f['scrollX']; ?>"
+			data-cw-scroll-y="<?php echo $f['scrollY']; ?>">
 
 			<?php if ($f['toolbar']) : ?>
 				<div class="cw-toolbar">
@@ -57,7 +60,7 @@ $wrapStyle = sprintf(
 					src="<?php echo $this->escape($this->url); ?>"
 					title="<?php echo $this->escape($f['title']); ?>"
 					loading="<?php echo $f['loading']; ?>"
-					scrolling="<?php echo $f['scrolling']; ?>"
+					scrolling="<?php echo $scrolling; ?>"
 					referrerpolicy="<?php echo $this->escape($f['referrer']); ?>"
 					<?php echo $f['sandbox'] !== '' ? 'sandbox="' . $this->escape($f['sandbox']) . '"' : ''; ?>
 					<?php echo $f['fullscreen'] ? 'allowfullscreen allow="fullscreen"' : ''; ?>></iframe>

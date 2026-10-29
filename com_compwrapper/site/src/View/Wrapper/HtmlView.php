@@ -110,16 +110,18 @@ class HtmlView extends BaseHtmlView
                 break;
         }
 
+        [$scrollX, $scrollY] = $this->scrollSettings();
+
         $loaderGlobal = (int) $p->get('show_loader', 1);
         $loader       = $p->get('frame_loader', '');
 
         return [
-            'mode'        => \in_array($p->get('height_mode', 'fixed'), ['fixed', 'auto', 'viewport'], true) ? $p->get('height_mode', 'fixed') : 'fixed',
-            'height'      => max(50, (int) $p->get('height', 800)),
+            'mode'        => $p->get('height_mode', 'fixed') === 'auto' ? 'auto' : 'fixed',
+            'cssWidth'    => $this->cssWidth(),
+            'cssHeight'   => $this->cssHeight(),
             'minHeight'   => max(0, (int) $p->get('min_height', 300)),
-            'offset'      => max(0, (int) $p->get('viewport_offset', 0)),
-            'width'       => preg_match('/^\d+(\.\d+)?(px|%|vw|rem|em)?$/', (string) $p->get('width', '100%')) ? (string) $p->get('width', '100%') : '100%',
-            'scrolling'   => \in_array($p->get('scrolling', 'auto'), ['auto', 'yes', 'no'], true) ? $p->get('scrolling', 'auto') : 'auto',
+            'scrollX'     => $scrollX,
+            'scrollY'     => $scrollY,
             'title'       => $p->get('frame_title', '') ?: ($p->get('page_title', '') ?: Text::_('COM_COMPWRAPPER_DEFAULT_FRAME_TITLE')),
             'loading'     => $p->get('loading', 'lazy') === 'eager' ? 'eager' : 'lazy',
             'fullscreen'  => (bool) $p->get('allowfullscreen', 1),
@@ -131,6 +133,68 @@ class HtmlView extends BaseHtmlView
             'toolbar'     => (bool) $p->get('show_toolbar', 0),
             'loader'      => $loader === '' ? (bool) $loaderGlobal : (bool) $loader,
         ];
+    }
+
+    /**
+     * Splits a stored size into number and unit. Older versions stored the width as text such as "100%" or "960px".
+     */
+    protected function sizeValue(string $name, float $default, string $defaultUnit): array
+    {
+        $raw = trim((string) $this->params->get($name, ''));
+
+        if (!preg_match('/^(\d+(?:\.\d+)?)\s*(px|%)?$/', $raw, $m) || (float) $m[1] <= 0) {
+            return [$default, $defaultUnit];
+        }
+
+        $unit = $m[2] ?? '';
+
+        if ($unit === '') {
+            $unit = $this->params->get($name . '_unit', $defaultUnit) === '%' ? '%' : 'px';
+        }
+
+        return [(float) $m[1], $unit];
+    }
+
+    protected function cssWidth(): string
+    {
+        [$value, $unit] = $this->sizeValue('width', 100, '%');
+
+        return $unit === '%' ? min(100, $value) . '%' : $value . 'px';
+    }
+
+    /**
+     * A percentage height refers to the browser window, because a page has no fixed height to refer to.
+     */
+    protected function cssHeight(): string
+    {
+        // Older menu items used a separate "viewport" mode
+        if ($this->params->get('height_mode') === 'viewport') {
+            return 'calc(100vh - ' . max(0, (int) $this->params->get('viewport_offset', 0)) . 'px)';
+        }
+
+        [$value, $unit] = $this->sizeValue('height', 800, 'px');
+
+        if ($unit === '%') {
+            $offset = max(0, (int) $this->params->get('viewport_offset', 0));
+
+            return $offset ? 'calc(' . $value . 'vh - ' . $offset . 'px)' : $value . 'vh';
+        }
+
+        return max(50, $value) . 'px';
+    }
+
+    /**
+     * Returns [x, y] as CSS overflow values. Falls back to the old single "scrolling" setting.
+     */
+    protected function scrollSettings(): array
+    {
+        $map    = ['auto' => 'auto', 'always' => 'scroll', 'never' => 'hidden'];
+        $legacy = ['yes' => 'always', 'no' => 'never', 'auto' => 'auto'][$this->params->get('scrolling', 'auto')] ?? 'auto';
+
+        $x = $map[$this->params->get('scroll_x', $legacy)] ?? 'auto';
+        $y = $map[$this->params->get('scroll_y', $legacy)] ?? 'auto';
+
+        return [$x, $y];
     }
 
     protected function prepareDocument(): void

@@ -10,27 +10,42 @@
 				hint="https://www.example.com/seite" />
 			<field name="frame_title" type="text"
 				label="COM_COMPWRAPPER_FRAME_TITLE_LABEL" description="COM_COMPWRAPPER_FRAME_TITLE_DESC" />
+			<field name="width" type="number" default="100" min="1" filter="float"
+				label="COM_COMPWRAPPER_WIDTH_LABEL" description="COM_COMPWRAPPER_WIDTH_DESC" />
+			<field name="width_unit" type="list" default="%"
+				label="COM_COMPWRAPPER_WIDTH_UNIT_LABEL">
+				<option value="%">COM_COMPWRAPPER_UNIT_PERCENT_WIDTH</option>
+				<option value="px">COM_COMPWRAPPER_UNIT_PX</option>
+			</field>
 			<field name="height_mode" type="list" default="fixed"
 				label="COM_COMPWRAPPER_HEIGHT_MODE_LABEL" description="COM_COMPWRAPPER_HEIGHT_MODE_DESC">
 				<option value="fixed">COM_COMPWRAPPER_HEIGHT_MODE_FIXED</option>
 				<option value="auto">COM_COMPWRAPPER_HEIGHT_MODE_AUTO</option>
-				<option value="viewport">COM_COMPWRAPPER_HEIGHT_MODE_VIEWPORT</option>
 			</field>
-			<field name="height" type="number" default="800" min="50" filter="integer"
-				label="COM_COMPWRAPPER_HEIGHT_LABEL" description="COM_COMPWRAPPER_HEIGHT_DESC"
-				showon="height_mode!:viewport" />
-			<field name="viewport_offset" type="number" default="120" min="0" filter="integer"
+			<field name="height" type="number" default="800" min="1" filter="float"
+				label="COM_COMPWRAPPER_HEIGHT_LABEL" description="COM_COMPWRAPPER_HEIGHT_DESC" />
+			<field name="height_unit" type="list" default="px"
+				label="COM_COMPWRAPPER_HEIGHT_UNIT_LABEL" description="COM_COMPWRAPPER_HEIGHT_UNIT_DESC"
+				showon="height_mode:fixed">
+				<option value="px">COM_COMPWRAPPER_UNIT_PX</option>
+				<option value="%">COM_COMPWRAPPER_UNIT_PERCENT_HEIGHT</option>
+			</field>
+			<field name="viewport_offset" type="number" default="0" min="0" filter="integer"
 				label="COM_COMPWRAPPER_VIEWPORT_OFFSET_LABEL" description="COM_COMPWRAPPER_VIEWPORT_OFFSET_DESC"
-				showon="height_mode:viewport" />
+				showon="height_mode:fixed[AND]height_unit:%" />
 			<field name="min_height" type="number" default="300" min="0" filter="integer"
 				label="COM_COMPWRAPPER_MIN_HEIGHT_LABEL" />
-			<field name="width" type="text" default="100%"
-				label="COM_COMPWRAPPER_WIDTH_LABEL" description="COM_COMPWRAPPER_WIDTH_DESC" />
-			<field name="scrolling" type="list" default="auto"
-				label="COM_COMPWRAPPER_SCROLLING_LABEL">
-				<option value="auto">COM_COMPWRAPPER_SCROLLING_AUTO</option>
-				<option value="yes">JYES</option>
-				<option value="no">JNO</option>
+			<field name="scroll_x" type="list" default="auto"
+				label="COM_COMPWRAPPER_SCROLL_X_LABEL" description="COM_COMPWRAPPER_SCROLL_DESC">
+				<option value="auto">COM_COMPWRAPPER_SCROLL_AUTO</option>
+				<option value="always">COM_COMPWRAPPER_SCROLL_ALWAYS</option>
+				<option value="never">COM_COMPWRAPPER_SCROLL_NEVER</option>
+			</field>
+			<field name="scroll_y" type="list" default="auto"
+				label="COM_COMPWRAPPER_SCROLL_Y_LABEL" description="COM_COMPWRAPPER_SCROLL_DESC">
+				<option value="auto">COM_COMPWRAPPER_SCROLL_AUTO</option>
+				<option value="always">COM_COMPWRAPPER_SCROLL_ALWAYS</option>
+				<option value="never">COM_COMPWRAPPER_SCROLL_NEVER</option>
 			</field>
 			<field name="loading" type="list" default="lazy"
 				label="COM_COMPWRAPPER_LOADING_LABEL">

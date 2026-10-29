@@ -12,16 +12,17 @@ Jede eingebundene Seite ist ein eigener Menüeintrag mit eigener URL und eigenen
 ## Funktionen
 
 - URL extern (http/https) oder als Pfad der eigenen Website (`/shop/`)
-- Höhe: fest, automatisch oder Bildschirmhöhe minus Versatz; Mindesthöhe, Breite, Scrollbalken, Lazy-Loading
+- Breite in px oder % (der Inhaltsbreite), Höhe in px oder % (der Fensterhöhe, optional minus Versatz) oder automatisch; Mindesthöhe, Lazy-Loading
+- Scrollbalken horizontal und vertikal getrennt: automatisch, immer oder nie
 - Design: schlicht, Karte oder Soft (abgerundet, sanfter Schatten, Dark Mode), Eckenradius, Akzentfarbe,
   Ladeanimation, optionale Titelleiste mit „In neuem Fenster öffnen“
 - Sandbox, Vollbild, Referrer-Policy
 - Globale Optionen: erlaubte Domains (Whitelist), HTTPS erzwingen, Standard-Design
 
-## Automatische Höhe bei fremden Domains
+## Automatische Höhe und Scrollbalken bei fremden Domains
 
-Liegt die eingebundene Seite auf derselben Domain, misst die Komponente die Höhe selbst.
-Bei einer anderen Domain muss die eingebundene Seite ihre Höhe melden. Dazu dieses Skript vor `</body>` einfügen:
+Liegt die eingebundene Seite auf derselben Domain, misst die Komponente die Höhe selbst und setzt die Scrollbalken direkt.
+Bei einer anderen Domain muss die eingebundene Seite mitspielen. Dazu dieses Skript vor `</body>` einfügen:
 
 ```html
 <script>
@@ -33,6 +34,13 @@ Bei einer anderen Domain muss die eingebundene Seite ihre Höhe melden. Dazu die
   window.addEventListener('load', send);
   window.addEventListener('resize', send);
   if (window.ResizeObserver) { new ResizeObserver(send).observe(document.body); }
+  window.addEventListener('message', function (e) {
+    var d = e.data, ok = ['auto', 'scroll', 'hidden'];
+    if (e.source !== parent || !d || d.type !== 'compwrapper:scroll') { return; }
+    if (ok.indexOf(d.x) > -1) { document.documentElement.style.overflowX = d.x; }
+    if (ok.indexOf(d.y) > -1) { document.documentElement.style.overflowY = d.y; }
+    send();
+  });
 })();
 </script>
 ```
