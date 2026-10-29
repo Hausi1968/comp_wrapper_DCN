@@ -17,6 +17,7 @@
 			<option value="plain">COM_COMPWRAPPER_STYLE_PLAIN</option>
 			<option value="card">COM_COMPWRAPPER_STYLE_CARD</option>
 			<option value="soft">COM_COMPWRAPPER_STYLE_SOFT</option>
+			<option value="dcn">COM_COMPWRAPPER_STYLE_DCN</option>
 		</field>
 		<field name="radius" type="number" default="18" min="0" max="48" filter="integer"
 			label="COM_COMPWRAPPER_RADIUS_LABEL" />

@@ -25,6 +25,51 @@
     }
   }
 
+  /**
+   * Scrollbars per axis. Same origin: set overflow on the embedded document directly.
+   * Other origin: ask the embedded page via postMessage (needs the snippet from the backend).
+   */
+  function applyScroll(iframe, scroll) {
+    if (scroll.x === 'auto' && scroll.y === 'auto') {
+      return;
+    }
+
+    try {
+      var doc = iframe.contentDocument;
+      if (doc && doc.documentElement) {
+        var root = doc.documentElement;
+        root.style.overflowX = scroll.x;
+        root.style.overflowY = scroll.y;
+        if (doc.body) {
+          doc.body.style.overflowX = scroll.x === 'hidden' ? 'hidden' : '';
+          doc.body.style.overflowY = scroll.y === 'hidden' ? 'hidden' : '';
+        }
+        return;
+      }
+    } catch (e) { /* cross origin, fall through */ }
+
+    if (iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'compwrapper:scroll', x: scroll.x, y: scroll.y }, '*');
+    }
+  }
+
+  /**
+   * Percentage height: fill the given share of the space between the iframe's top and the window bottom,
+   * so header, menu and hero bar are taken into account automatically.
+   */
+  function fitHeight(frame, iframe, percent, offset) {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var frameRect = frame.getBoundingClientRect();
+    var top = iframe.getBoundingClientRect().top + window.pageYOffset;
+    var below = Math.max(0, frameRect.bottom - iframe.getBoundingClientRect().bottom);
+
+    // Only use the remaining space when the iframe starts on the first screen, otherwise the full window
+    var start = top < vh * 0.6 ? top : 0;
+    var free = vh - start - below - 16;
+
+    setHeight(frame, iframe, free * percent / 100 - offset);
+  }
+
   function init(frame) {
     var iframe = frame.querySelector('.cw-iframe');
     if (!iframe) {
@@ -32,15 +77,15 @@
     }
 
     var auto = frame.getAttribute('data-cw-mode') === 'auto';
-
-    var done = false;
+    var scroll = {
+      x: frame.getAttribute('data-cw-scroll-x') || 'auto',
+      y: frame.getAttribute('data-cw-scroll-y') || 'auto'
+    };
+    var lastDoc = null;
 
     function onLoad() {
-      if (done) {
-        return;
-      }
-      done = true;
       frame.classList.remove('cw-loading');
+      applyScroll(iframe, scroll);
 
       if (!auto) {
         return;
@@ -52,7 +97,9 @@
 
         try {
           var doc = iframe.contentDocument;
-          if (window.ResizeObserver && doc && doc.body) {
+          // Runs again after navigation inside the iframe, so observe each new document once
+          if (window.ResizeObserver && doc && doc.body && doc !== lastDoc) {
+            lastDoc = doc;
             new ResizeObserver(function () {
               setHeight(frame, iframe, sameOriginHeight(iframe));
             }).observe(doc.body);
@@ -73,6 +120,22 @@
 
     // Fallback: hide the loader even if "load" never fires (blocked by X-Frame-Options etc.)
     setTimeout(function () { frame.classList.remove('cw-loading'); }, 8000);
+
+    var fit = parseFloat(frame.getAttribute('data-cw-fit')) || 0;
+
+    if (fit > 0) {
+      var offset = parseInt(frame.getAttribute('data-cw-offset'), 10) || 0;
+      var refit = function () { fitHeight(frame, iframe, fit, offset); };
+      var timer;
+
+      refit();
+      // Fonts and images above the iframe can still move it down after DOMContentLoaded
+      window.addEventListener('load', refit);
+      window.addEventListener('resize', function () {
+        clearTimeout(timer);
+        timer = setTimeout(refit, 100);
+      });
+    }
 
     if (auto) {
       window.addEventListener('message', function (event) {
