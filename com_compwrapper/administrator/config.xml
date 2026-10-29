@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="security" label="COM_COMPWRAPPER_FIELDSET_SECURITY">
+		<field name="allowed_hosts" type="textarea" rows="4"
+			label="COM_COMPWRAPPER_ALLOWED_HOSTS_LABEL"
+			description="COM_COMPWRAPPER_ALLOWED_HOSTS_DESC"
+			hint="example.com&#10;shop.example.com" />
+		<field name="force_https" type="radio" layout="joomla.form.field.radio.switcher" default="0"
+			label="COM_COMPWRAPPER_FORCE_HTTPS_LABEL" description="COM_COMPWRAPPER_FORCE_HTTPS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+	<fieldset name="design" label="COM_COMPWRAPPER_FIELDSET_DESIGN">
+		<field name="style" type="list" default="soft"
+			label="COM_COMPWRAPPER_STYLE_LABEL" description="COM_COMPWRAPPER_STYLE_DESC">
+			<option value="plain">COM_COMPWRAPPER_STYLE_PLAIN</option>
+			<option value="card">COM_COMPWRAPPER_STYLE_CARD</option>
+			<option value="soft">COM_COMPWRAPPER_STYLE_SOFT</option>
+		</field>
+		<field name="radius" type="number" default="18" min="0" max="48" filter="integer"
+			label="COM_COMPWRAPPER_RADIUS_LABEL" />
+		<field name="accent" type="color" default="#0071e3"
+			label="COM_COMPWRAPPER_ACCENT_LABEL" description="COM_COMPWRAPPER_ACCENT_DESC" />
+		<field name="show_loader" type="radio" layout="joomla.form.field.radio.switcher" default="1"
+			label="COM_COMPWRAPPER_SHOW_LOADER_LABEL">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" filter="rules"
+			validate="rules" component="com_compwrapper" section="component" />
+	</fieldset>
+</config>

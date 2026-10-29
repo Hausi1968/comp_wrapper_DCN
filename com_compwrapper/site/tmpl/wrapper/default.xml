@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_COMPWRAPPER_WRAPPER_VIEW_DEFAULT_TITLE">
+		<message><![CDATA[COM_COMPWRAPPER_WRAPPER_VIEW_DEFAULT_DESC]]></message>
+	</layout>
+	<fields name="params">
+		<fieldset name="basic" label="COM_COMPWRAPPER_FIELDSET_PAGE">
+			<field name="url" type="url" required="true" filter="url" validate="url" relative="true"
+				label="COM_COMPWRAPPER_URL_LABEL" description="COM_COMPWRAPPER_URL_DESC"
+				hint="https://www.example.com/seite" />
+			<field name="frame_title" type="text"
+				label="COM_COMPWRAPPER_FRAME_TITLE_LABEL" description="COM_COMPWRAPPER_FRAME_TITLE_DESC" />
+			<field name="height_mode" type="list" default="fixed"
+				label="COM_COMPWRAPPER_HEIGHT_MODE_LABEL" description="COM_COMPWRAPPER_HEIGHT_MODE_DESC">
+				<option value="fixed">COM_COMPWRAPPER_HEIGHT_MODE_FIXED</option>
+				<option value="auto">COM_COMPWRAPPER_HEIGHT_MODE_AUTO</option>
+				<option value="viewport">COM_COMPWRAPPER_HEIGHT_MODE_VIEWPORT</option>
+			</field>
+			<field name="height" type="number" default="800" min="50" filter="integer"
+				label="COM_COMPWRAPPER_HEIGHT_LABEL" description="COM_COMPWRAPPER_HEIGHT_DESC"
+				showon="height_mode!:viewport" />
+			<field name="viewport_offset" type="number" default="120" min="0" filter="integer"
+				label="COM_COMPWRAPPER_VIEWPORT_OFFSET_LABEL" description="COM_COMPWRAPPER_VIEWPORT_OFFSET_DESC"
+				showon="height_mode:viewport" />
+			<field name="min_height" type="number" default="300" min="0" filter="integer"
+				label="COM_COMPWRAPPER_MIN_HEIGHT_LABEL" />
+			<field name="width" type="text" default="100%"
+				label="COM_COMPWRAPPER_WIDTH_LABEL" description="COM_COMPWRAPPER_WIDTH_DESC" />
+			<field name="scrolling" type="list" default="auto"
+				label="COM_COMPWRAPPER_SCROLLING_LABEL">
+				<option value="auto">COM_COMPWRAPPER_SCROLLING_AUTO</option>
+				<option value="yes">JYES</option>
+				<option value="no">JNO</option>
+			</field>
+			<field name="loading" type="list" default="lazy"
+				label="COM_COMPWRAPPER_LOADING_LABEL">
+				<option value="lazy">COM_COMPWRAPPER_LOADING_LAZY</option>
+				<option value="eager">COM_COMPWRAPPER_LOADING_EAGER</option>
+			</field>
+		</fieldset>
+		<fieldset name="design" label="COM_COMPWRAPPER_FIELDSET_DESIGN">
+			<field name="frame_style" type="list" default=""
+				label="COM_COMPWRAPPER_STYLE_LABEL" description="COM_COMPWRAPPER_STYLE_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="plain">COM_COMPWRAPPER_STYLE_PLAIN</option>
+				<option value="card">COM_COMPWRAPPER_STYLE_CARD</option>
+				<option value="soft">COM_COMPWRAPPER_STYLE_SOFT</option>
+			</field>
+			<field name="frame_radius" type="number" min="0" max="48" filter="string"
+				label="COM_COMPWRAPPER_RADIUS_LABEL" description="COM_COMPWRAPPER_RADIUS_MENU_DESC" />
+			<field name="frame_accent" type="color" default=""
+				label="COM_COMPWRAPPER_ACCENT_LABEL" description="COM_COMPWRAPPER_ACCENT_MENU_DESC" />
+			<field name="show_toolbar" type="radio" layout="joomla.form.field.radio.switcher" default="0"
+				label="COM_COMPWRAPPER_SHOW_TOOLBAR_LABEL" description="COM_COMPWRAPPER_SHOW_TOOLBAR_DESC">
+				<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+			</field>
+			<field name="frame_loader" type="list" default=""
+				label="COM_COMPWRAPPER_SHOW_LOADER_LABEL">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+			</field>
+		</fieldset>
+		<fieldset name="advanced" label="COM_COMPWRAPPER_FIELDSET_ADVANCED">
+			<field name="allowfullscreen" type="radio" layout="joomla.form.field.radio.switcher" default="1"
+				label="COM_COMPWRAPPER_FULLSCREEN_LABEL">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="sandbox" type="list" default="none"
+				label="COM_COMPWRAPPER_SANDBOX_LABEL" description="COM_COMPWRAPPER_SANDBOX_DESC">
+				<option value="none">COM_COMPWRAPPER_SANDBOX_NONE</option>
+				<option value="same-origin">COM_COMPWRAPPER_SANDBOX_SAMEORIGIN</option>
+				<option value="strict">COM_COMPWRAPPER_SANDBOX_STRICT</option>
+				<option value="custom">COM_COMPWRAPPER_SANDBOX_CUSTOM</option>
+			</field>
+			<field name="sandbox_custom" type="text" showon="sandbox:custom"
+				label="COM_COMPWRAPPER_SANDBOX_CUSTOM_LABEL" hint="allow-scripts allow-forms" />
+			<field name="referrerpolicy" type="list" default="strict-origin-when-cross-origin"
+				label="COM_COMPWRAPPER_REFERRER_LABEL">
+				<option value="strict-origin-when-cross-origin">strict-origin-when-cross-origin</option>
+				<option value="no-referrer">no-referrer</option>
+				<option value="origin">origin</option>
+				<option value="same-origin">same-origin</option>
+				<option value="unsafe-url">unsafe-url</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>
