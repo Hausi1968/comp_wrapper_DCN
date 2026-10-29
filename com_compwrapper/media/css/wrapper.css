@@ -128,3 +128,18 @@
   .cw-loader span { animation-duration: 2.4s; }
   .cw-iframe { transition: none; }
 }
+
+/* dcn: the frame takes the homepage's own .dcn-card look; only keep the iframe inside its corners */
+.cw-style-dcn {
+  overflow: hidden;
+}
+
+.cw-style-dcn .cw-toolbar {
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cw-style-dcn .cw-iframe {
+  border-radius: var(--cw-radius, 12px);
+}

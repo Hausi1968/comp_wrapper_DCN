@@ -88,7 +88,7 @@ class HtmlView extends BaseHtmlView
         $p = $this->params;
 
         $style = $p->get('frame_style', '');
-        $style = \in_array($style, ['plain', 'card', 'soft'], true) ? $style : $p->get('style', 'soft');
+        $style = \in_array($style, ['plain', 'card', 'soft', 'dcn'], true) ? $style : $p->get('style', 'soft');
 
         $radius = $p->get('frame_radius', '');
         $radius = $radius === '' ? (int) $p->get('radius', 18) : (int) $radius;
