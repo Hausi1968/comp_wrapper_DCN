@@ -20,6 +20,7 @@
 }
 
 .cw-frame {
+  box-sizing: border-box;
   width: var(--cw-width, 100%);
   max-width: 100%;
   margin: 0 auto;
@@ -129,17 +130,83 @@
   .cw-iframe { transition: none; }
 }
 
-/* dcn: the frame takes the homepage's own .dcn-card look; only keep the iframe inside its corners */
+/*
+ * dcn: matches the DC Neuwerk template (dcn-v610). The template defines --dcn-* tokens and .dcn-hero;
+ * the values after the commas are the same tokens as fallback. :where() keeps the fallbacks at zero
+ * specificity so the template's own rules always win.
+ */
+:where(.com-compwrapper.dcn-page) {
+  max-width: var(--dcn-max, 900px);
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  font-family: var(--dcn-font-body, Arial, sans-serif);
+  color: var(--dcn-text, #333333);
+}
+
+:where(.com-compwrapper .dcn-hero) {
+  text-align: center;
+  padding: 32px 16px 28px;
+  margin-bottom: 28px;
+  background: var(--dcn-primary-dk, #711410);
+  color: var(--dcn-white, #ffffff);
+  border-bottom: 6px solid var(--dcn-accent, #83242b);
+  border-radius: var(--dcn-radius, 10px);
+}
+
+:where(.com-compwrapper .dcn-hero h1) {
+  margin: 0 0 6px;
+  font-family: var(--dcn-font-head, 'Monotype Corsiva', 'Apple Chancery', 'Lucida Calligraphy', Arial, cursive);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--dcn-white, #ffffff);
+}
+
+/* The template colours .dcn-page p dark, which is unreadable on the red bar */
+.com-compwrapper.dcn-page .dcn-hero p {
+  margin: 0;
+  color: var(--dcn-white, #ffffff);
+  text-align: center;
+  opacity: 0.9;
+}
+
 .cw-style-dcn {
   overflow: hidden;
+  background: var(--dcn-white, #ffffff);
+  border: 2px solid var(--dcn-primary, #83242b);
+  border-radius: var(--dcn-radius, 10px);
 }
 
 .cw-style-dcn .cw-toolbar {
-  background: transparent;
-  padding-left: 0;
-  padding-right: 0;
+  background: var(--dcn-grey, #f3f3f3);
+  border-bottom: 1px solid var(--dcn-line, #dddddd);
+  border-left: 4px solid var(--dcn-accent, #83242b);
+  font-family: var(--dcn-font-body, Arial, sans-serif);
+  font-weight: 700;
+  color: var(--dcn-text, #333333);
+}
+
+.cw-style-dcn .cw-toolbar-link {
+  color: var(--dcn-primary, #83242b);
+  font-weight: 400;
 }
 
 .cw-style-dcn .cw-iframe {
-  border-radius: var(--cw-radius, 12px);
+  background: var(--dcn-white, #ffffff);
+}
+
+.cw-style-dcn .cw-loader {
+  background: var(--dcn-white, #ffffff);
+}
+
+.cw-style-dcn .cw-loader span {
+  border-top-color: var(--dcn-primary, #83242b);
+}
+
+/* The dcn template has no dark mode, so keep the light colours there too */
+@media (prefers-color-scheme: dark) {
+  .com-compwrapper.dcn-page {
+    --cw-bg: #ffffff;
+    --cw-border: #dddddd;
+  }
 }

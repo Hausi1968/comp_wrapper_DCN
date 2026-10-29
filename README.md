@@ -16,7 +16,7 @@ Jede eingebundene Seite ist ein eigener Menüeintrag mit eigener URL und eigenen
 - Scrollbalken horizontal und vertikal getrennt: automatisch, immer oder nie
 - Design: schlicht, Karte oder Soft (abgerundet, sanfter Schatten, Dark Mode), Eckenradius, Akzentfarbe,
   Ladeanimation, optionale Titelleiste mit „In neuem Fenster öffnen“
-- Stil „Homepage-Design (DCN)“: nutzt die Klassen der Vereins-Homepage (`dcn-page`, `dcn-hero`, `dcn-intro`, `dcn-card`) mit Überschrift, Unterzeile und Einleitungstext, damit das Template den Wrapper wie die übrigen Seiten gestaltet
+- Stil „Homepage-Design (DCN)“: nutzt die Klassen der Vereins-Homepage (`dcn-page`, `dcn-hero`, `dcn-intro`, `dcn-card`) mit rotem Kopfbalken (Titel wahlweise aus Menüeintrag/Linktitel, iframe-Titel oder eigenem Text), Unterzeile und Einleitungstext, damit das Template den Wrapper wie die übrigen Seiten gestaltet
 - Sandbox, Vollbild, Referrer-Policy
 - Globale Optionen: erlaubte Domains (Whitelist), HTTPS erzwingen, Standard-Design
 

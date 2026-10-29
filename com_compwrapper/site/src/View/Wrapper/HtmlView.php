@@ -22,6 +22,9 @@ class HtmlView extends BaseHtmlView
     /** @var string  Validated URL of the embedded page, empty if invalid */
     protected $url = '';
 
+    /** @var string  Title of the active menu item (the link title) */
+    protected $menuTitle = '';
+
     /** @var array  Prepared iframe/layout settings for the template */
     protected $frame = [];
 
@@ -197,6 +200,27 @@ class HtmlView extends BaseHtmlView
         return [$x, $y];
     }
 
+    /**
+     * Text for the red header bar of the DCN style.
+     */
+    public function heroTitle(): string
+    {
+        $custom = trim((string) $this->params->get('dcn_title', ''));
+        // Menu items saved before the source option existed only had the custom field
+        $source = $this->params->get('dcn_title_source', $custom !== '' ? 'custom' : 'menu');
+
+        switch ($source) {
+            case 'none':
+                return '';
+            case 'frame':
+                return $this->frame['title'];
+            case 'custom':
+                return $custom;
+            default:
+                return $this->menuTitle !== '' ? $this->menuTitle : (string) $this->params->get('page_heading', '');
+        }
+    }
+
     protected function prepareDocument(): void
     {
         $app   = Factory::getApplication();
@@ -204,6 +228,7 @@ class HtmlView extends BaseHtmlView
         $title = $this->params->get('page_title', '');
 
         if ($menu) {
+            $this->menuTitle = (string) $menu->title;
             $this->params->def('page_heading', $this->params->get('page_title', $menu->title));
         }
 

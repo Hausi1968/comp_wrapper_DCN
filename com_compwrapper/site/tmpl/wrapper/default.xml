@@ -62,8 +62,15 @@
 				<option value="soft">COM_COMPWRAPPER_STYLE_SOFT</option>
 				<option value="dcn">COM_COMPWRAPPER_STYLE_DCN</option>
 			</field>
-			<field name="dcn_title" type="text" showon="frame_style:dcn"
-				label="COM_COMPWRAPPER_DCN_TITLE_LABEL" description="COM_COMPWRAPPER_DCN_TITLE_DESC" />
+			<field name="dcn_title_source" type="list" default="menu" showon="frame_style:dcn"
+				label="COM_COMPWRAPPER_DCN_TITLE_SOURCE_LABEL" description="COM_COMPWRAPPER_DCN_TITLE_SOURCE_DESC">
+				<option value="menu">COM_COMPWRAPPER_DCN_TITLE_SOURCE_MENU</option>
+				<option value="frame">COM_COMPWRAPPER_DCN_TITLE_SOURCE_FRAME</option>
+				<option value="custom">COM_COMPWRAPPER_DCN_TITLE_SOURCE_CUSTOM</option>
+				<option value="none">COM_COMPWRAPPER_DCN_TITLE_SOURCE_NONE</option>
+			</field>
+			<field name="dcn_title" type="text" showon="frame_style:dcn[AND]dcn_title_source:custom"
+				label="COM_COMPWRAPPER_DCN_TITLE_LABEL" />
 			<field name="dcn_subtitle" type="text" showon="frame_style:dcn"
 				label="COM_COMPWRAPPER_DCN_SUBTITLE_LABEL" />
 			<field name="dcn_intro" type="textarea" rows="3" filter="safehtml" showon="frame_style:dcn"

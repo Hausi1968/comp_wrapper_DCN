@@ -28,7 +28,7 @@ $scrolling = ($f['scrollX'] === 'hidden' && $f['scrollY'] === 'hidden') ? 'no' :
 <?php
 // The DCN style reuses the homepage's own classes (dcn-page, dcn-hero, dcn-intro, dcn-card), so the template CSS styles it
 $dcn      = $f['style'] === 'dcn';
-$dcnTitle = $dcn ? ($this->params->get('dcn_title', '') ?: $this->params->get('page_heading', '')) : '';
+$dcnTitle = $dcn ? $this->heroTitle() : '';
 ?>
 <div class="com-compwrapper<?php echo $dcn ? ' dcn-page' : ''; ?>">
 	<?php if ($dcn && ($dcnTitle !== '' || $this->params->get('dcn_subtitle', ''))) : ?>
